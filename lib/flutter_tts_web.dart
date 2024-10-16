@@ -34,9 +34,9 @@ class FlutterTtsPlugin {
     channel.setMethodCallHandler(instance.handleMethodCall);
   }
 
-  late SpeechSynthesisUtterance utterance;
+  late final SpeechSynthesisUtterance utterance;
   List<SpeechSynthesisVoice> voices = [];
-  List<String?> languages = [];
+  List<String> languages = [];
   Timer? t;
   bool supported = false;
 
@@ -201,9 +201,9 @@ class FlutterTtsPlugin {
     if (languages.isEmpty) _setLanguages();
     for (var lang in languages) {
       if (!language!.contains('-')) {
-        lang = lang!.split('-').first;
+        lang = lang.split('-').first;
       }
-      if (lang!.toLowerCase() == language.toLowerCase()) return true;
+      if (lang.toLowerCase() == language.toLowerCase()) return true;
     }
     return false;
   }
@@ -226,6 +226,11 @@ class FlutterTtsPlugin {
   }
 
   void _setLanguages() {
-    languages = voices.map((v) => v.lang).toList();
+    var langs = <String>{};
+    for (var v in voices) {
+      langs.add(v.lang);
+    }
+
+    languages = langs.toList();
   }
 }
